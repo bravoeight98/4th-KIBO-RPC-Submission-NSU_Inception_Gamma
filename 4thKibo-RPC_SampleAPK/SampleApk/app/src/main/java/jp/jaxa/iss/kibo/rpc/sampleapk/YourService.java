@@ -30,6 +30,7 @@ public class YourService extends KiboRpcService {
             Quaternion quaternion = new Quaternion(0f, 0f, 0f, 1f);
             api.moveTo(point, quaternion, false);
 
+
             // get a camera image
             Mat image = api.getMatNavCam();
 
@@ -43,6 +44,22 @@ public class YourService extends KiboRpcService {
             /* ************************************************ */
             /* write your own code and repair the ammonia leak! */
             /* ************************************************ */
+
+            //Move to Airlock
+            Point point4 = new Point(10.51d, -6.7185d, 5.1804d);
+            Quaternion quaternion4 = new Quaternion(0f, 0f, -1f, 0f);
+            api.moveTo(point4, quaternion4, true);
+
+            // get a camera image
+            Mat image4 = api.getMatNavCam();
+
+            // irradiate the laser
+            api.laserControl(true);
+
+            // take active target snapshots
+            int target_id4 = 4;
+            api.takeTargetSnapshot(target_id4);
+
 
             // get remaining active time and mission time
             List<Long> timeRemaining = api.getTimeRemaining();
@@ -59,7 +76,7 @@ public class YourService extends KiboRpcService {
         }
         // turn on the front flash light
         api.flashlightControlFront(0.05f);
-        
+
         // get QR code content
         String mQrContent = yourMethod();
 
@@ -73,13 +90,54 @@ public class YourService extends KiboRpcService {
         /* write your own code to move Astrobee to the goal positiion */
         /* ********************************************************** */
 
+        //Move to point 2
+        Point point2 = new Point(10.612f, -9.0709f, 4.48f);
+        Quaternion quaternion2 = new Quaternion(0.5f, 0.5f, -0.5f, 0.5f);
+        api.moveTo(point2, quaternion2, true);
+        //Log.i("point2","here");
+
+        //Move to point 6
+        Point point6 = new Point(11.355f, -8.9929f, 4.7818f);
+        Quaternion quaternion6 = new Quaternion(0f, 0f, 0f, 1f);
+        api.moveTo(point6, quaternion6, true);
+        //Log.i("point6","here");
+
+        // get a camera image
+        Mat image6 = api.getMatNavCam();
+
+        // irradiate the laser
+        api.laserControl(true);
+
+        // take active target snapshots
+        int target_id6 = 6;
+        api.takeTargetSnapshot(target_id6);
+
+        //Move to point QR
+        Point pointQR = new Point(11.381944f, -8.566172f, 3.76293f);
+        Quaternion quaternionQR = new Quaternion(0f, 0f, 0f, 1f);
+        api.moveTo(pointQR, quaternionQR, true);
+        //Log.i("pointQR","here");
+
+        Mat imageQR = api.getMatNavCam();
+
+        // turn on the front flash light
+        api.flashlightControlFront(0.05f);
+        // get QR code content
+        //String mQrContent = yourMethod();
+        // turn off the front flash light
+        api.flashlightControlFront(0.00f);
+
+        // take active target snapshots
+        int target_idQR = 100;
+        api.takeTargetSnapshot(target_idQR);
+
         // send mission completion
         api.reportMissionCompletion(mQrContent);
     }
 
     @Override
     protected void runPlan2(){
-       // write your plan 2 here
+        // write your plan 2 here
     }
 
     @Override
