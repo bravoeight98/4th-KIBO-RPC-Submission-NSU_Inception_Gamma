@@ -90,11 +90,54 @@ public class YourService extends KiboRpcService {
         /* write your own code to move Astrobee to the goal positiion */
         /* ********************************************************** */
 
+        //Move to point 5
+        Point point5 = new Point(11.114f, -7.9756f, 5.3393f);
+        Quaternion quaternion5 = new Quaternion(-0.5f, -0.5f, -0.5f, 0.5f);
+        api.moveTo(point5, quaternion5, true);
+        //Log.i("point5","here");
+
+        // get a camera image
+        Mat image5 = api.getMatNavCam();
+
+        // irradiate the laser
+        api.laserControl(true);
+
+        // take active target snapshots
+        int target_id5 = 5;
+        api.takeTargetSnapshot(target_id5);
+
+        //Move to point 3
+        Point point3 = new Point(10.71f, -7.7f, 4.48f);
+        Quaternion quaternion3 = new Quaternion(0f, 0.707f, 0f, 0.707f);
+        api.moveTo(point3, quaternion3, true);
+        //Log.i("point3","here");
+
+        // get a camera image
+        Mat image3 = api.getMatNavCam();
+
+        // irradiate the laser
+        api.laserControl(true);
+
+        // take active target snapshots
+        int target_id3 = 3;
+        api.takeTargetSnapshot(target_id3);
+
+
         //Move to point 2
         Point point2 = new Point(10.612f, -9.0709f, 4.48f);
         Quaternion quaternion2 = new Quaternion(0.5f, 0.5f, -0.5f, 0.5f);
         api.moveTo(point2, quaternion2, true);
         //Log.i("point2","here");
+
+        // get a camera image
+        Mat image2 = api.getMatNavCam();
+
+        // irradiate the laser
+        api.laserControl(true);
+
+        // take active target snapshots
+        int target_id2 = 2;
+        api.takeTargetSnapshot(target_id2);
 
         //Move to point 6
         Point point6 = new Point(11.355f, -8.9929f, 4.7818f);
@@ -128,8 +171,40 @@ public class YourService extends KiboRpcService {
         api.flashlightControlFront(0.00f);
 
         // take active target snapshots
-        int target_idQR = 100;
+        int target_idQR = 50;
         api.takeTargetSnapshot(target_idQR);
+
+        //Move to point 1
+        Point point1 = new Point(11.2746f, -9.92284f, 5.2988f);
+        Quaternion quaternion1 = new Quaternion(0f, 0f, -0.707f, 0.707f);
+        api.moveTo(point1, quaternion1, true);
+        //Log.i("point1","here");
+
+        // get a camera image
+        Mat image6 = api.getMatNavCam();
+
+        // irradiate the laser
+        api.laserControl(true);
+
+        // take active target snapshots
+        int target_id1 = 1;
+        api.takeTargetSnapshot(target_id1);
+
+        //Move to point Goal
+        Point pointG = new Point(11.143f, -6.7607f, 4.9654f);
+        Quaternion quaternionG = new Quaternion(0f, 0f, -0.707f, 0.707f);
+        api.moveTo(pointG, quaternionG, true);
+        //Log.i("Goal","here");
+
+        // get a camera image
+        //Mat imageG = api.getMatNavCam();
+
+        // irradiate the laser
+        //api.laserControl(true);
+
+        // take active target snapshots
+        //int target_idG = 100;
+        //api.takeTargetSnapshot(target_idG);
 
         // send mission completion
         api.reportMissionCompletion(mQrContent);
