@@ -154,7 +154,7 @@ public class YourService extends KiboRpcService {
         /* ********************************************************** */
         /* write your own code to move Astrobee to the goal positiion */
         /* ********************************************************** */
-
+/*
         //Move to point 5
         Point point5 = new Point(11.114f, -7.9756f, 5.3393f);
         Quaternion quaternion5 = new Quaternion(-0.5f, -0.5f, -0.5f, 0.5f);
@@ -254,7 +254,7 @@ public class YourService extends KiboRpcService {
         // take active target snapshots
         int target_id1 = 1;
         api.takeTargetSnapshot(target_id1);
-
+*/
         //Move to point Goal
         Point pointG = new Point(11.143f, -6.7607f, 4.9654f);
         Quaternion quaternionG = new Quaternion(0f, 0f, -0.707f, 0.707f);
