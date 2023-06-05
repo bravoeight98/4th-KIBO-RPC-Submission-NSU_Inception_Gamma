@@ -125,6 +125,42 @@ public class YourService extends KiboRpcService {
             int target_id6 = 6;
             api.takeTargetSnapshot(target_id6);
 
+            //Move to point QR
+            Point pointQR = new Point(11.381944f, -8.566172f, 3.76293f);
+            Quaternion quaternionQR = new Quaternion(0f, 0f, 0f, 1f);
+            api.moveTo(pointQR, quaternionQR, true);
+            //Log.i("pointQR","here");
+
+            Mat imageQR = api.getMatNavCam();
+
+            // turn on the front flash light
+            api.flashlightControlFront(0.05f);
+            // get QR code content
+            //String mQrContent = yourMethod();
+            // take active target snapshots
+            int target_idQR = 50;
+            api.takeTargetSnapshot(target_idQR);
+            // turn off the front flash light
+            api.flashlightControlFront(0.00f);
+
+
+
+            //Move to point 1
+            Point point1 = new Point(11.2746f, -9.92284f, 5.2988f);
+            Quaternion quaternion1 = new Quaternion(0f, 0f, -0.707f, 0.707f);
+            api.moveTo(point1, quaternion1, true);
+            //Log.i("point1","here");
+
+            // get a camera image
+            Mat image1 = api.getMatNavCam();
+
+            // irradiate the laser
+            api.laserControl(true);
+
+            // take active target snapshots
+            int target_id1 = 1;
+            api.takeTargetSnapshot(target_id1);
+
 
             // get remaining active time and mission time
             List<Long> timeRemaining = api.getTimeRemaining();
