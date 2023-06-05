@@ -181,7 +181,7 @@ public class YourService extends KiboRpcService {
         //Log.i("point1","here");
 
         // get a camera image
-        Mat image6 = api.getMatNavCam();
+        Mat image1 = api.getMatNavCam();
 
         // irradiate the laser
         api.laserControl(true);
