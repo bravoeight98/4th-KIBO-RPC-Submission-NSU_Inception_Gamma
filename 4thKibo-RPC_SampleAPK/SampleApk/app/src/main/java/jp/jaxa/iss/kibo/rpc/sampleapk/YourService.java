@@ -76,7 +76,7 @@ public class YourService extends KiboRpcService {
         /* write your own code to move Astrobee to the goal positiion */
         /* ********************************************************** */
 
-        //Move to Airlock
+        //Move to point4
         Point point4 = new Point(10.51d, -6.7185d, 5.1804d);
         Quaternion quaternion4 = new Quaternion(0f, 0f, -1f, 0f);
         api.moveTo(point4, quaternion4, true);
