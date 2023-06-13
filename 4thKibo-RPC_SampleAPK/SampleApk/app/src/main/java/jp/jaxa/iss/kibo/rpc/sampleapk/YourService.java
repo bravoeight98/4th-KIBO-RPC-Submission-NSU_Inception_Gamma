@@ -171,7 +171,14 @@ public class YourService extends KiboRpcService {
         // turn on the front flash light
         api.flashlightControlFront(0.05f);
         // get QR code content
-        //String mQrContent = yourMethod();
+        String qrCodeData = scanQRCode();
+
+        if (qrCodeData != null) {
+            System.out.println("QR Code data: " + qrCodeData);
+        } else {
+            System.out.println("Failed to scan QR Code.");
+        }
+
         // turn off the front flash light
         api.flashlightControlFront(0.00f);
 
@@ -212,7 +219,7 @@ public class YourService extends KiboRpcService {
         //api.takeTargetSnapshot(target_idG);
 
         // send mission completion
-        api.reportMissionCompletion(mQrContent);
+        api.reportMissionCompletion(qrCodeData);
     }
 
     @Override
