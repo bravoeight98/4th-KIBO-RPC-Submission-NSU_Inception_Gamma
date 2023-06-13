@@ -164,6 +164,14 @@ public class YourService extends KiboRpcService {
 
         Mat imageQR = api.getMatNavCam();
 
+        String qrCodeData = decodeQRCode(imageQR);
+
+        if (qrCodeData != null) {
+            System.out.println("QR Code data: " + qrCodeData);
+        } else {
+            System.out.println("Failed to decode QR Code.");
+        }
+
         // turn on the front flash light
         api.flashlightControlFront(0.05f);
         // get QR code content
@@ -224,6 +232,30 @@ public class YourService extends KiboRpcService {
     // You can add your method
     private String yourMethod(){
         return "your method";
+    }
+
+    public static String decodeQRCode(Mat qrCodeImage) {
+        try {
+            Mat grayImage = new Mat();
+            Imgproc.cvtColor(qrCodeImage, grayImage, Imgproc.COLOR_BGR2GRAY);
+
+            Mat binImage = new Mat();
+            Imgproc.threshold(grayImage, binImage, 128, 255, Imgproc.THRESH_BINARY);
+
+            MatOfByte matOfByte = new MatOfByte();
+            Imgcodecs.imencode(".jpg", binImage, matOfByte);
+            byte[] byteArray = matOfByte.toArray();
+
+            LuminanceSource source = new BufferedImageLuminanceSource(ImageIO.read(new ByteArrayInputStream(byteArray)));
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
+            return new String(qrCodeResult.getRawBytes(), StandardCharsets.UTF_8);
+        } catch (IOException | ReaderException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
