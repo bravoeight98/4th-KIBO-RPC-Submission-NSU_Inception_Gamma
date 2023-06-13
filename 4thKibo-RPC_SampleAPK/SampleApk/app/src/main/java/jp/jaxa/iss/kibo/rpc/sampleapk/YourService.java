@@ -8,14 +8,6 @@ import gov.nasa.arc.astrobee.android.gs.MessageType;
 import gov.nasa.arc.astrobee.types.Point;
 import gov.nasa.arc.astrobee.types.Quaternion;
 
-import com.google.zxing.*;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 import org.opencv.core.Mat;
 
 /**
@@ -85,7 +77,7 @@ public class YourService extends KiboRpcService {
         /* ********************************************************** */
 
         //Move to point4
-        Point point4 = new Point(10.51d, -6.7185d, 5.1804d);
+        Point point4 = new Point(10.51f, -6.7185f, 5.1804f);
         Quaternion quaternion4 = new Quaternion(0f, 0f, -1f, 0f);
         api.moveTo(point4, quaternion4, true);
 
@@ -94,6 +86,8 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
+
 
         // take active target snapshots
         int target_id4 = 4;
@@ -110,6 +104,7 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
 
         // take active target snapshots
         int target_id5 = 5;
@@ -126,6 +121,7 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
 
         // take active target snapshots
         int target_id3 = 3;
@@ -143,6 +139,7 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
 
         // take active target snapshots
         int target_id2 = 2;
@@ -159,6 +156,7 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
 
         // take active target snapshots
         int target_id6 = 6;
@@ -193,6 +191,7 @@ public class YourService extends KiboRpcService {
 
         // irradiate the laser
         api.laserControl(true);
+        api.laserControl(false);
 
         // take active target snapshots
         int target_id1 = 1;
@@ -215,7 +214,7 @@ public class YourService extends KiboRpcService {
         //api.takeTargetSnapshot(target_idG);
 
         // send mission completion
-        api.reportMissionCompletion(qrCodeData);
+        api.reportMissionCompletion(mQrContent);
     }
 
     @Override
