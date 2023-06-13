@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    compile 'me.dm7.barcodescanner:zbar:1.9.8'
     compile project(':guest_science_library')
     compile project(':kibo_rpc_api')
     compile fileTree(dir: 'libs', include: ['*.jar'])

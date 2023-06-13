@@ -8,6 +8,8 @@ import gov.nasa.arc.astrobee.android.gs.MessageType;
 import gov.nasa.arc.astrobee.types.Point;
 import gov.nasa.arc.astrobee.types.Quaternion;
 
+import net.sourceforge.zbar.*;
+
 import org.opencv.core.Mat;
 
 /**
@@ -61,10 +63,26 @@ public class YourService extends KiboRpcService {
             }
         }
         // turn on the front flash light
-        api.flashlightControlFront(0.05f);
+        api.flashlightControlFront(0.50f);
 
         // get QR code content
-        String mQrContent = yourMethod();
+        // String mQrContent = yourMethod();
+        QRCodeReader qrCodeReader = new QRCodeReader();
+        try {
+            result = qrCodeReader.decode(binaryBitmap);
+       } catch (NotFoundException e) {
+        // QR code not found in the image
+        e.printStackTrace();
+        }
+
+        // Print the decoded QR code data
+        if (result != null) {
+            System.out.println("QR Code data: " + result.getText());
+        } else {
+            System.out.println("No QR Code found in the image.");
+        }
+
+        String mQrContent = result.getText();
 
         // turn off the front flash light
         api.flashlightControlFront(0.00f);
