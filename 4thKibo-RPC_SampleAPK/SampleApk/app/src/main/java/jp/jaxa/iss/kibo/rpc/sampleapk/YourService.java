@@ -170,19 +170,10 @@ public class YourService extends KiboRpcService {
         api.moveTo(pointQR, quaternionQR, true);
         //Log.i("pointQR","here");
 
-        Mat imageQR = api.getMatNavCam();
-
-        String qrCodeData = decodeQRCode(imageQR);
-
-        if (qrCodeData != null) {
-            System.out.println("QR Code data: " + qrCodeData);
-        } else {
-            System.out.println("Failed to decode QR Code.");
-        }
-
         // turn on the front flash light
         api.flashlightControlFront(0.05f);
         // get QR code content
+        Mat imageQR = api.getMatNavCam();
 
         // turn off the front flash light
         api.flashlightControlFront(0.00f);
@@ -240,24 +231,6 @@ public class YourService extends KiboRpcService {
     // You can add your method
     private String yourMethod(){
         return "your method";
-    }
-
-    public static String scanQRCode(String imagePath) {
-        try {
-            BufferedImage image = ImageIO.read(new File(imagePath));
-
-            LuminanceSource source = new BufferedImageLuminanceSource(image);
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-            QRCodeReader reader = new QRCodeReader();
-            Result result = reader.decode(bitmap);
-
-            return result.getText();
-        } catch (IOException | NotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
 }
