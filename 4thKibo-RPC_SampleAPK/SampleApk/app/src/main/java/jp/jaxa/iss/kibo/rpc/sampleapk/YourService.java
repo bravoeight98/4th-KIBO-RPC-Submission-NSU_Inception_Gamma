@@ -230,17 +230,19 @@ public class YourService extends KiboRpcService {
         return "your method";
     }
 
-    public static String scanQRCode(String imagePath) {
+    public static String scanQRCode() {
+        ScanQrCodeCommand scanCommand = new ScanQrCodeCommand();
+        scanCommand.setPriority((short) 0);
+
+        ScanQrCodeResponse response = null;
         try {
-            BufferedImage image = ImageIO.read(new File(imagePath));
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
-                    new BufferedImageLuminanceSource(image)));
+            response = (ScanQrCodeResponse) AstrobeeComm.getInstance().sendCommand(scanCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
-
-            return qrCodeResult.getText();
-        } catch (IOException | ReaderException e) {
-            System.out.println("Error: " + e.getMessage());
+        if (response != null && response.getResponseStatus() == Status.COMPLETED) {
+            return response.getQrCodeData();
         }
 
         return null;
