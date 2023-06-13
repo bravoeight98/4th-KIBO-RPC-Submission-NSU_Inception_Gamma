@@ -8,9 +8,17 @@ import gov.nasa.arc.astrobee.android.gs.MessageType;
 import gov.nasa.arc.astrobee.types.Point;
 import gov.nasa.arc.astrobee.types.Quaternion;
 
-import gov.nasa.arc.ff.ocu.commands.ScanQrCodeCommand;
-import gov.nasa.arc.ff.ocu.commands.ScanQrCodeResponse;
-import gov.nasa.arc.ff.ocu.commands.Status;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import org.opencv.core.Mat;
 
