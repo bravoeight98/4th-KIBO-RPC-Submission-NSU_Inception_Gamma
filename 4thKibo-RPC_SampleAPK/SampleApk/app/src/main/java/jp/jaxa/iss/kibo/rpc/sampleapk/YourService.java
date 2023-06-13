@@ -9,15 +9,16 @@ import gov.nasa.arc.astrobee.types.Point;
 import gov.nasa.arc.astrobee.types.Quaternion;
 
 import org.opencv.core.CvType;
-import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfInt;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.ArrayList;
+import java.util.List;
+import net.sourceforge.zbar.ImageScanner;
+import net.sourceforge.zbar.Symbol;
+import net.sourceforge.zbar.SymbolSet;
 import org.opencv.core.Mat;
 
 /**
@@ -248,25 +249,39 @@ public class YourService extends KiboRpcService {
         Mat grayImage = new Mat();
         Imgproc.cvtColor(qrCodeImage, grayImage, Imgproc.COLOR_BGR2GRAY);
 
-        Mat binImage = new Mat();
-        Imgproc.threshold(grayImage, binImage, 128, 255, Imgproc.THRESH_BINARY);
-
         MatOfByte matOfByte = new MatOfByte();
-        Imgcodecs.imencode(".jpg", binImage, matOfByte);
-
+        Imgcodecs.imencode(".jpg", grayImage, matOfByte);
         byte[] byteArray = matOfByte.toArray();
-        String base64Image = Base64.getEncoder().encodeToString(byteArray);
 
-        return decodeBase64QRCode(base64Image);
-    }
+        // Create an ImageScanner instance
+        ImageScanner scanner = new ImageScanner();
+        scanner.setConfig(0, net.sourceforge.zbar.Config.ENABLE);
+        scanner.setConfig(Symbol.QRCODE, net.sourceforge.zbar.Config.ENABLE);
 
-    private static String decodeBase64QRCode(String base64Image) {
+        // Create an Image object from the byte array
+        net.sourceforge.zbar.Image image = new net.sourceforge.zbar.Image(qrCodeImage.cols(), qrCodeImage.rows(), "Y800");
+        image.setData(byteArray);
 
-            byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
-            String decodedText = new String(decodedBytes, StandardCharsets.UTF_8);
+        // Scan the image and obtain the symbols (QR codes) found
+        int result = scanner.scanImage(image);
 
-            return decodedText;
-            
+        if (result != 0) {
+            SymbolSet symbols = scanner.getResults();
+            List<String> decodedStrings = new ArrayList<>();
+
+            // Extract the decoded strings from the symbols
+            for (Symbol symbol : symbols) {
+                String decodedString = symbol.getData();
+                decodedStrings.add(decodedString);
+            }
+
+            if (!decodedStrings.isEmpty()) {
+                // Return the first decoded string
+                return decodedStrings.get(0);
+            }
+        }
+
+        return null;
     }
 
 }
