@@ -242,40 +242,19 @@ public class YourService extends KiboRpcService {
         return "your method";
     }
 
-    public static String decodeQRCode(Mat qrCodeImage) {
-        Mat grayImage = new Mat();
-        Imgproc.cvtColor(qrCodeImage, grayImage, Imgproc.COLOR_BGR2GRAY);
+    public static String scanQRCode(String imagePath) {
+        try {
+            BufferedImage image = ImageIO.read(new File(imagePath));
 
-        MatOfByte matOfByte = new MatOfByte();
-        Imgcodecs.imencode(".jpg", grayImage, matOfByte);
-        byte[] byteArray = matOfByte.toArray();
+            LuminanceSource source = new BufferedImageLuminanceSource(image);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-        // Create an ImageScanner instance
-        ImageScanner scanner = new ImageScanner();
-        scanner.setConfig(0, net.sourceforge.zbar.Config.ENABLE);
-        scanner.setConfig(Symbol.QRCODE, net.sourceforge.zbar.Config.ENABLE);
+            QRCodeReader reader = new QRCodeReader();
+            Result result = reader.decode(bitmap);
 
-        // Create an Image object from the byte array
-        net.sourceforge.zbar.Image image = new net.sourceforge.zbar.Image(qrCodeImage.cols(), qrCodeImage.rows(), "Y800");
-        image.setData(byteArray);
-
-        // Scan the image and obtain the symbols (QR codes) found
-        int result = scanner.scanImage(image);
-
-        if (result != 0) {
-            SymbolSet symbols = scanner.getResults();
-            List<String> decodedStrings = new ArrayList<>();
-
-            // Extract the decoded strings from the symbols
-            for (Symbol symbol : symbols) {
-                String decodedString = symbol.getData();
-                decodedStrings.add(decodedString);
-            }
-
-            if (!decodedStrings.isEmpty()) {
-                // Return the first decoded string
-                return decodedStrings.get(0);
-            }
+            return result.getText();
+        } catch (IOException | NotFoundException e) {
+            e.printStackTrace();
         }
 
         return null;
