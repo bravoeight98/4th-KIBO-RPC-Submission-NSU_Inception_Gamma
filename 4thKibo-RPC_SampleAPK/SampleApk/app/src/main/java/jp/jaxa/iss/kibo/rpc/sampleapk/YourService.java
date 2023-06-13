@@ -8,18 +8,6 @@ import gov.nasa.arc.astrobee.android.gs.MessageType;
 import gov.nasa.arc.astrobee.types.Point;
 import gov.nasa.arc.astrobee.types.Quaternion;
 
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 import org.opencv.core.Mat;
 
 /**
@@ -179,13 +167,6 @@ public class YourService extends KiboRpcService {
         // turn on the front flash light
         api.flashlightControlFront(0.05f);
         // get QR code content
-        String qrCodeData = scanQRCode();
-
-        if (qrCodeData != null) {
-            System.out.println("QR Code data: " + qrCodeData);
-        } else {
-            System.out.println("Failed to scan QR Code.");
-        }
 
         // turn off the front flash light
         api.flashlightControlFront(0.00f);
@@ -243,22 +224,6 @@ public class YourService extends KiboRpcService {
     // You can add your method
     private String yourMethod(){
         return "your method";
-    }
-
-    public static String scanQRCode(File imageFile) {
-        try {
-            BufferedImage image = ImageIO.read(imageFile);
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
-                    new BufferedImageLuminanceSource(image)));
-
-            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
-
-            return qrCodeResult.getText();
-        } catch (IOException | ReaderException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
 }
