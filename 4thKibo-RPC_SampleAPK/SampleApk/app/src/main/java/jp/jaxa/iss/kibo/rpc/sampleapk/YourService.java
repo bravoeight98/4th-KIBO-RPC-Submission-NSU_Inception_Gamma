@@ -237,4 +237,21 @@ public class YourService extends KiboRpcService {
     private String yourMethod(){
         return "your method";
     }
+
+    public static String scanQRCode(String imagePath) {
+        try {
+            BufferedImage image = ImageIO.read(new File(imagePath));
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
+                    new BufferedImageLuminanceSource(image)));
+
+            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
+
+            return qrCodeResult.getText();
+        } catch (IOException | ReaderException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return null;
+    }
+        
 }
