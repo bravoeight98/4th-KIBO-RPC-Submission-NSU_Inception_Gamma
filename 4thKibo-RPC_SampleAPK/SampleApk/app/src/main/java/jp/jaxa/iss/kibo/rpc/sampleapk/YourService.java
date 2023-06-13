@@ -245,23 +245,28 @@ public class YourService extends KiboRpcService {
     }
 
     public static String decodeQRCode(Mat qrCodeImage) {
+        Mat grayImage = new Mat();
+        Imgproc.cvtColor(qrCodeImage, grayImage, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binImage = new Mat();
+        Imgproc.threshold(grayImage, binImage, 128, 255, Imgproc.THRESH_BINARY);
+
+        MatOfByte matOfByte = new MatOfByte();
+        Imgcodecs.imencode(".jpg", binImage, matOfByte);
+
+        byte[] byteArray = matOfByte.toArray();
+        String base64Image = Base64.getEncoder().encodeToString(byteArray);
+
+        return decodeBase64QRCode(base64Image);
+    }
+
+    private static String decodeBase64QRCode(String base64Image) {
         try {
-            Mat grayImage = new Mat();
-            Imgproc.cvtColor(qrCodeImage, grayImage, Imgproc.COLOR_BGR2GRAY);
+            byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+            String decodedText = new String(decodedBytes, StandardCharsets.UTF_8);
 
-            Mat binImage = new Mat();
-            Imgproc.threshold(grayImage, binImage, 128, 255, Imgproc.THRESH_BINARY);
-
-            MatOfByte matOfByte = new MatOfByte();
-            Imgcodecs.imencode(".jpg", binImage, matOfByte);
-            byte[] byteArray = matOfByte.toArray();
-
-            LuminanceSource source = new BufferedImageLuminanceSource(ImageIO.read(new ByteArrayInputStream(byteArray)));
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
-            return new String(qrCodeResult.getRawBytes(), StandardCharsets.UTF_8);
-        } catch (IOException | ReaderException e) {
+            return decodedText;
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
