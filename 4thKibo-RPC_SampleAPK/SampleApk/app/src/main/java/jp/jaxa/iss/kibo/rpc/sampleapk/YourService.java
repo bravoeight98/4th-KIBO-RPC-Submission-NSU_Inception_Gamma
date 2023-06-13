@@ -261,16 +261,12 @@ public class YourService extends KiboRpcService {
     }
 
     private static String decodeBase64QRCode(String base64Image) {
-        try {
+
             byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
             String decodedText = new String(decodedBytes, StandardCharsets.UTF_8);
 
             return decodedText;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+            
     }
 
 }
