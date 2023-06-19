@@ -85,12 +85,22 @@ public class YourService extends KiboRpcService {
         api.laserControl(false);
 
         Waypoint2Number(2);
+
+        // move to a point2
+        Point point2 = new Point(10.612f,-9.0709f,4.48f);
+        Quaternion quaternion2 = new Quaternion(0.5,0.5,-0.5,0.5);
+        api.moveTo(point2, quaternion2, true);
         
         //point laser
         api.laserControl(true);
         api.laserControl(false);
 
         Waypoint2Number(6);
+
+        // move to a point6
+        Point point6 = new Point(11.355f,-8.9929f,4.7818f);
+        Quaternion quaternion6 = new Quaternion(0,0,0,1);
+        api.moveTo(point6, quaternion6, true);
         
         //point laser
         api.laserControl(true);
@@ -114,6 +124,12 @@ public class YourService extends KiboRpcService {
         //List<Long> Time = api.getTimeRemaining();
 
         Waypoint2Number(1);
+
+        // move to a point1
+        Point point1 = new Point(11.2746,-9.92284,5.2988 );
+        Quaternion quaternion1 = new Quaternion(0,0,-0.707,0.707);
+        api.moveTo(point1, quaternion1, true);
+
         api.laserControl(true);
         api.laserControl(false);   
 
