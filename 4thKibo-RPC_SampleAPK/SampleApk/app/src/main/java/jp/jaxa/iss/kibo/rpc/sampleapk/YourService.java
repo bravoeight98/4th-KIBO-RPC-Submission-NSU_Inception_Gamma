@@ -83,6 +83,10 @@ public class YourService extends KiboRpcService {
         //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
+        Waypoint2Number(1);
+        api.laserControl(true);
+        api.laserControl(false);   
+
         while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
             GoTarget(api.getActiveTargets(),Now_place);
         }
