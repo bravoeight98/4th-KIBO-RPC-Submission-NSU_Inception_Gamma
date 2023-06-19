@@ -53,7 +53,7 @@ public class YourService extends KiboRpcService {
         Waypoint2Number(4);
         
         // move to a point4
-        Point point = new Point(10.51f,-6.7185f,5.1804f );
+        Point point = new Point(10.51f,-6.7185f,5.1804f);
         Quaternion quaternion = new Quaternion(0f,0f,-1f,0f);
         api.moveTo(point, quaternion, false);
         
@@ -63,19 +63,33 @@ public class YourService extends KiboRpcService {
 
         Waypoint2Number(5);
         
+                
+        // move to a point5
+        Point point = new Point(11.114f,-7.9756f,5.3393f);
+        Quaternion quaternion = new Quaternion(-0.5f,-0.5f,-0.5f,0.5f);
+        api.moveTo(point, quaternion, false);
+
         //point laser
         api.laserControl(true);
         api.laserControl(false);
-        Waypoint2Number(4);
-        
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false);
+
         Waypoint2Number(3);
         
+        // move to a point3
+        Point point = new Point(11.114f,-7.9756f,5.3393f);
+        Quaternion quaternion = new Quaternion(-0.5f,-0.5f,-0.5f,0.5f);
+        api.moveTo(point, quaternion, false);
+
         //point laser
         api.laserControl(true);
         api.laserControl(false);
+
+        Waypoint2Number(2);
+        
+        //point laser
+        api.laserControl(true);
+        api.laserControl(false);
+
         Waypoint2Number(6);
         
         //point laser
