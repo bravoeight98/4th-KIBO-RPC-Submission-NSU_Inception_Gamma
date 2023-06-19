@@ -106,8 +106,6 @@ public class YourService extends KiboRpcService {
         api.laserControl(true);
         api.laserControl(false);        
 
-        Waypoint2Number(6);
-
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
         //Change value 
@@ -127,9 +125,9 @@ public class YourService extends KiboRpcService {
         Waypoint2Number(1);
 
         // move to a point1
-        Point point1 = new Point(11.2746,-9.92284,5.2988 );
-        Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
-        api.moveTo(point1, quaternion1, true);
+        //Point point1 = new Point(11.2746,-9.92284,5.2988 );
+        //Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
+        //api.moveTo(point1, quaternion1, true);
 
         api.laserControl(true);
         api.laserControl(false);   
