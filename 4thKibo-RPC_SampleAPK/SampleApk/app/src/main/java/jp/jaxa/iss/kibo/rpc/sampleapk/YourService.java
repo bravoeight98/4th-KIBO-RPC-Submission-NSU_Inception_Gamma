@@ -47,6 +47,26 @@ public class YourService extends KiboRpcService {
         api.startMission();
         Log.i(TAG, "mission start");
         MoveToWaypoint(waypoints_config.wp1); // initial point
+
+        //4->5->3->2->6->QR->1->Goal
+
+        Waypoint2Number(4);
+        api.laserControl(true);
+        api.laserControl(false);
+        Waypoint2Number(5);
+        api.laserControl(true);
+        api.laserControl(false);
+        Waypoint2Number(4);
+        api.laserControl(true);
+        api.laserControl(false);
+        Waypoint2Number(3);
+        api.laserControl(true);
+        api.laserControl(false);
+        Waypoint2Number(6);
+        api.laserControl(true);
+        api.laserControl(false);        
+
+
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
         //Change value 
