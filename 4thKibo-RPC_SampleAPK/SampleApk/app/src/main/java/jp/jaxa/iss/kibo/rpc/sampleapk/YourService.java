@@ -106,6 +106,7 @@ public class YourService extends KiboRpcService {
         api.laserControl(true);
         api.laserControl(false);        
 
+        Waypoint2Number(6);
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
