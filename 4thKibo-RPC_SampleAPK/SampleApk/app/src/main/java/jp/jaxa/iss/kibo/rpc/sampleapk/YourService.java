@@ -52,9 +52,9 @@ public class YourService extends KiboRpcService {
 
         Waypoint2Number(4);
         
-        // move to a point
-        Point point = new Point(10.4d, -10.1d, 4.47d);
-        Quaternion quaternion = new Quaternion(0f, 0f, 0f, 1f);
+        // move to a point4
+        Point point = new Point(10.51f,-6.7185f,5.1804f );
+        Quaternion quaternion = new Quaternion(0f,0f,-1f,0f);
         api.moveTo(point, quaternion, false);
         
         //point laser
