@@ -47,7 +47,7 @@ public class YourService extends KiboRpcService {
         api.startMission();
         Log.i(TAG, "mission start");
         MoveToWaypoint(waypoints_config.wp1); // initial point
-
+/*
         //4->5->3->2->6->QR->1->Goal
 
         Waypoint2Number(4);
@@ -104,7 +104,8 @@ public class YourService extends KiboRpcService {
         
         //point laser
         api.laserControl(true);
-        api.laserControl(false);        
+        api.laserControl(false); 
+             
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
@@ -117,24 +118,44 @@ public class YourService extends KiboRpcService {
         api.saveMatImage(image,"wp2.png");
         String report = read_QRcode(image);
 
+        */
+
         //Begin Search
         //Long ActiveTime = Time.get(0); //Remaining time in current phase in milliseconds
         //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
-        Waypoint2Number(1);
+        //Waypoint2Number(1);
 
         // move to a point1
         //Point point1 = new Point(11.2746,-9.92284,5.2988 );
         //Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
         //api.moveTo(point1, quaternion1, true);
 
-        api.laserControl(true);
-        api.laserControl(false);   
+        //api.laserControl(true);
+        //api.laserControl(false);   
 
-        while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
+        while (api.getTimeRemaining().get(1) >(5-1.0)*60*1000){
             GoTarget(api.getActiveTargets(),Now_place);
         }
+
+        MoveToWaypoint(waypoints_config.wp2); // QR point
+
+        //Change value 
+        Now_place = 9;
+
+        // turn on the front flash light
+        api.flashlightControlFront(0.50f);
+
+        //Scan QR
+        Mat image = new Mat();
+        image = api.getMatNavCam();
+        api.saveMatImage(image,"wp2.png");
+        String report = read_QRcode(image);
+
+        // turn off the front flash light
+        api.flashlightControlFront(0.00f);
+
         Log.i(TAG,"go to goal");
         MoveToWaypoint(waypoints_config.goal_point);
 
@@ -357,20 +378,65 @@ public class YourService extends KiboRpcService {
         switch (n){
             case 1:
                 MoveToWaypoint(waypoints_config.point1);
+                // move to a point1
+                Point point1 = new Point(11.2746,-9.92284,5.2988 );
+                Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
+                api.moveTo(point1, quaternion1, true);
+                //point laser
+                api.laserControl(true);
+                api.laserControl(false);
+                MoveToWaypoint(waypoints_config.point1);
                 break;
             case 2:
+                MoveToWaypoint(waypoints_config.point2);
+                // move to a point2
+                Point point2 = new Point(10.612f,-9.0709f,4.48f);
+                Quaternion quaternion2 = new Quaternion(0.5f,0.5f,-0.5f,0.5f);
+                api.moveTo(point2, quaternion2, true);
+                //point laser
+                api.laserControl(true);
+                api.laserControl(false);
                 MoveToWaypoint(waypoints_config.point2);
                 break;
             case 3:
                 MoveToWaypoint(waypoints_config.point3);
+                // move to a point3
+                Point point3 = new Point(10.71f,-7.7f,4.48f);
+                Quaternion quaternion3 = new Quaternion(0f,0.707f,0f,0.707f);
+                api.moveTo(point3, quaternion3, true);
+                //point laser
+                api.laserControl(true);
+                api.laserControl(false);
+                MoveToWaypoint(waypoints_config.point3);
                 break;
             case 4:
+                MoveToWaypoint(waypoints_config.point4);
+                // move to a point4
+                Point point4 = new Point(10.51f,-6.7185f,5.1804f);
+                Quaternion quaternion4 = new Quaternion(0f,0f,-1f,0f);
+                api.moveTo(point4, quaternion4, true);
+                //point laser
+                api.laserControl(true);
+                api.laserControl(false);
                 MoveToWaypoint(waypoints_config.point4);
                 break;
             case 5:
                 MoveToWaypoint(waypoints_config.point5);
+                // move to a point5
+                Point point5 = new Point(11.114f,-7.9756f,5.3393f);
+                Quaternion quaternion5 = new Quaternion(-0.5f,-0.5f,-0.5f,0.5f);
+                api.moveTo(point5, quaternion5, true);
+                //point laser
+                api.laserControl(true);
+                api.laserControl(false);        
+                MoveToWaypoint(waypoints_config.point5);
                 break;
             case 6:
+                MoveToWaypoint(waypoints_config.point6);
+                // move to a point6
+                Point point6 = new Point(11.355f,-8.9929f,4.7818f);
+                Quaternion quaternion6 = new Quaternion(0f,0f,0f,1f);
+                api.moveTo(point6, quaternion6, true);
                 MoveToWaypoint(waypoints_config.point6);
                 break;
             case 7:
