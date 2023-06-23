@@ -135,7 +135,7 @@ public class YourService extends KiboRpcService {
         //api.laserControl(true);
         //api.laserControl(false);   
 
-        while (api.getTimeRemaining().get(1) >(5-1.5)*60*1000){
+        while (api.getTimeRemaining().get(1) >(5-2.0)*60*1000){
             GoTarget(api.getActiveTargets(),Now_place);
         }
 
