@@ -234,12 +234,12 @@ public class YourService extends KiboRpcService {
         int [] prev = new int[n]; //previous vertex
         List<Integer> path = new ArrayList<>(); //save path
 
-        // distances配列を初期化し、始点以外の頂点を無限大に設定
+        // Initialize the distances array and set vertices other than the starting point to infinity
         Arrays.fill(distances, INF);
         distances[start] = 0.0;
 
         for (int i = 0; i < n; i++) {
-            // 未訪問の頂点のうち、距離が最小の頂点を見つける
+            // Find the unvisited vertex with the smallest distance
             double minDist = INF;
             int minIndex = -1;
 
@@ -250,15 +250,15 @@ public class YourService extends KiboRpcService {
                 }
             }
 
-            // 見つからなかった場合、終了
+            // if not found, exit
             if (minIndex == -1) {
                 break;
             }
 
-            // 見つかった頂点を訪問済みとする
+            // mark the found vertex as visited
             visited[minIndex] = true;
 
-            // 隣接する頂点の距離を更新する
+            // Update the distance of adjacent vertices
             for (int j = 0; j < n; j++) {
                 if (!visited[j] && A[minIndex][j] != INF) {
                     double distance = distances[minIndex] + A[minIndex][j];
@@ -270,9 +270,9 @@ public class YourService extends KiboRpcService {
             }
         }
         if (distances[end] == INF) {
-            return path; // 到達不可能な場合、空のリストを返す
+            return path; // Returns an empty list if unreachable
         }
-        // 終点から始点までの最短経路を復元
+        // Restore shortest path from end point to start point
         int current = end;
         path.add(current);
         while (current != start) {
@@ -282,9 +282,9 @@ public class YourService extends KiboRpcService {
         path.add(0,start);
         return path;
     }
-    // ゼロオリジンで考えたときのウェイポイントの番号
+    // Waypoint number when considered with zero origin
     private void Waypoint2Number(int n){
-        Global.Nowplace = n; //現在位置の変更
+        Global.Nowplace = n; //Change current position
         Log.i(TAG,"Now_place is "+ Global.Nowplace);
         switch (n){
             case 0:
@@ -327,7 +327,7 @@ public class YourService extends KiboRpcService {
         String QRcode_content = "";
         try {
             api.saveMatImage(image, "QR.png");
-            Mat mini_image = new Mat(image, new Rect(700, 360, 240, 240)); // ここの値は切り取る領域
+            Mat mini_image = new Mat(image, new Rect(700, 360, 240, 240)); // The value here is the area to clip
             api.saveMatImage(mini_image, "QR_mini.png");
 
             MatOfPoint2f points = new MatOfPoint2f();
