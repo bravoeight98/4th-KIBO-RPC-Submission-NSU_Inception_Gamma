@@ -152,17 +152,17 @@ public class YourService extends KiboRpcService {
         }
     }
 
-    //右下のマーカを見つける
+    //find the bottom right marker
     private int findBottomRight(List<Mat> corners){
         Log.i(TAG,"start findBottomRight");
-        // out = 関数のreturn
+        // out = function return
         int out = 0;
         int temp = 0;
 
-        //corners.get(n).get(0, 0) -> n番目のマーカの右下のxy座標を取得
+        //corners.get(n).get(0, 0) -> Get the xy coordinates of the bottom right corner of the nth marker
         for(int n=0; n<4; n++){
             Log.i(TAG,"Loop" + n );
-            // 三平方の定理で一番数字が大きいものは遠いことを用いる
+            // Use the Pythagorean theorem that the largest number is the farthest
             // a^2 + b^2 = c^2
             double[] ab = corners.get(n).get(0,2);
             int c = (int)ab[0] * (int)ab[0] + (int)ab[1] * (int)ab[1];
@@ -172,7 +172,7 @@ public class YourService extends KiboRpcService {
                 Log.i(TAG,"change");
             }
         }
-        // 右下（一番遠い）のは配列の何番目かをreturn
+        // The lower right (farthest) returns the number of the array
         Log.i(TAG,"finish findBottomRight");
         return out;
     }
@@ -182,12 +182,12 @@ public class YourService extends KiboRpcService {
     private void LoggingKinematics(){
         //Kinematics no Log
         Kinematics kinematics = api.getRobotKinematics();
-        Log.i(TAG, "[LoggingKinematics]: 状態" + kinematics.getConfidence().toString());
-        Log.i(TAG, "[LoggingKinematics]: 絶対座標" + kinematics.getPosition().toString());
-        Log.i(TAG, "[LoggingKinematics]: 方向座標" + kinematics.getOrientation().toString());
-        Log.i(TAG, "[LoggingKinematics]: 線速度" + kinematics.getLinearVelocity().toString());      // 線速度
-        Log.i(TAG, "[LoggingKinematics]: 角速度" + kinematics.getAngularVelocity().toString());     // 角速度
-        Log.i(TAG, "[LoggingKinematics]: 加速度" + kinematics.getLinearAcceleration().toString());  // 加速度
+        Log.i(TAG, "[LoggingKinematics]: state" + kinematics.getConfidence().toString());
+        Log.i(TAG, "[LoggingKinematics]: absolute coordinates" + kinematics.getPosition().toString());
+        Log.i(TAG, "[LoggingKinematics]: direction coordinates" + kinematics.getOrientation().toString());
+        Log.i(TAG, "[LoggingKinematics]: Line speed" + kinematics.getLinearVelocity().toString());      // Line speed
+        Log.i(TAG, "[LoggingKinematics]: angular velocity" + kinematics.getAngularVelocity().toString());     // angular velocity
+        Log.i(TAG, "[LoggingKinematics]: acceleration" + kinematics.getLinearAcceleration().toString());  // acceleration
     }
 
     private  void GoTarget(List<Integer> ActiveTargets){
@@ -195,28 +195,28 @@ public class YourService extends KiboRpcService {
         int i = 0;
         double [] distance = new double[2];
 
-        Log.i(TAG,"アクティブターゲット"+ActiveTargets.toString());
-        //最短距離となるように目標ターゲットの順番を変更
+        Log.i(TAG,"active target"+ActiveTargets.toString());
+        //Changed the order of the objective targets to be the shortest distance
         if (index == 2) {
             distance[0] = minimum_distance(Global.Nowplace,ActiveTargets.get(0)-1);
             distance[1] = minimum_distance(Global.Nowplace,ActiveTargets.get(1)-1);
             if(distance[0] > distance[1]){
-                //順番を交換
+                //exchange the order
                 int temp = ActiveTargets.get(0);
                 ActiveTargets.set(0,ActiveTargets.get(1));
                 ActiveTargets.set(1,temp);
-                Log.i(TAG,"アクティブターゲットを交換"+ActiveTargets.toString());
+                Log.i(TAG,"Swap Active Target"+ActiveTargets.toString());
             }
         }
         //
 
         while(i < index){
             Log.i(TAG, "Let's go Target" + ActiveTargets.get(i).toString());
-            Log.i(TAG,"Gotarget内での現在位置"+Global.Nowplace);
-            List<Integer>route = dijkstra(Global.Nowplace,ActiveTargets.get(i)-1); //-1はゼロオリジンへの修正
+            Log.i(TAG,"Current position in Gotarget"+Global.Nowplace);
+            List<Integer>route = dijkstra(Global.Nowplace,ActiveTargets.get(i)-1); //-1 is a fix to zero origin
             Log.i(TAG,"Route"+route.toString());
 
-            for(int n = 1; n<route.size();n++){ //n = 0はスタート地点なのでスキップ
+            for(int n = 1; n<route.size();n++){ //n = 0 is the starting point, so skip it
                 //Log.i(TAG, "Let's go to node " +route.get(n).toString());
                 Waypoint2Number(route.get(n));
             }
@@ -228,11 +228,11 @@ public class YourService extends KiboRpcService {
 
     public static List<Integer> dijkstra(int start, int end) {
         double [][] A = adjacency_matrix.graph;
-        int n = A.length; // 頂点数
-        double[] distances = new double[n]; // 始点から各頂点までの最短距離
-        boolean[] visited = new boolean[n]; // 頂点の訪問状態
-        int [] prev = new int[n]; //直前の頂点
-        List<Integer> path = new ArrayList<>(); //パスの保存
+        int n = A.length; // number of vertices
+        double[] distances = new double[n]; // shortest distance from the starting point to each vertex
+        boolean[] visited = new boolean[n]; // vertex visit state
+        int [] prev = new int[n]; //previous vertex
+        List<Integer> path = new ArrayList<>(); //save path
 
         // distances配列を初期化し、始点以外の頂点を無限大に設定
         Arrays.fill(distances, INF);
