@@ -34,129 +34,39 @@ import java.util.List;
  */
 
 public class YourService extends KiboRpcService {
-    private static final double INF = Double.POSITIVE_INFINITY; // infinity value to indicate disconnection
+    private static final double INF = Double.POSITIVE_INFINITY; // 非接続を示すための無限大の値
     private final String TAG = this.getClass().getSimpleName();
-    static String report = "STAY_AT_JEM"; //　Write the message corresponding to the QR here
-    static int Now_place; //current location
 
     @Override
     protected void runPlan1(){
 
-        //Begin mission 
+        //      mission start         //
 
         api.startMission();
-        Log.i(TAG, "mission start");
+        Log.i(TAG, "start mission");
         MoveToWaypoint(waypoints_config.wp1); // initial point
-/*
-        //4->5->3->2->6->QR->1->Goal
-
-        Waypoint2Number(4);
-        
-        // move to a point4
-        Point point4 = new Point(10.51f,-6.7185f,5.1804f);
-        Quaternion quaternion4 = new Quaternion(0f,0f,-1f,0f);
-        api.moveTo(point4, quaternion4, true);
-        
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false);
-
-        Waypoint2Number(5);
-        
-                
-        // move to a point5
-        Point point5 = new Point(11.114f,-7.9756f,5.3393f);
-        Quaternion quaternion5 = new Quaternion(-0.5f,-0.5f,-0.5f,0.5f);
-        api.moveTo(point5, quaternion5, true);
-
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false);
-
-        Waypoint2Number(3);
-        
-        // move to a point3
-        Point point3 = new Point(10.71f,-7.7f,4.48f);
-        Quaternion quaternion3 = new Quaternion(0f,0.707f,0f,0.707f);
-        api.moveTo(point3, quaternion3, true);
-
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false);
-
-        Waypoint2Number(2);
-
-        // move to a point2
-        Point point2 = new Point(10.612f,-9.0709f,4.48f);
-        Quaternion quaternion2 = new Quaternion(0.5f,0.5f,-0.5f,0.5f);
-        api.moveTo(point2, quaternion2, true);
-        
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false);
-
-        Waypoint2Number(6);
-
-        // move to a point6
-        Point point6 = new Point(11.355f,-8.9929f,4.7818f);
-        Quaternion quaternion6 = new Quaternion(0f,0f,0f,1f);
-        api.moveTo(point6, quaternion6, true);
-        
-        //point laser
-        api.laserControl(true);
-        api.laserControl(false); 
-             
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
-        //Change value 
-        Now_place = 9;
+        //change values
+        Global.Nowplace = 8;
+
 
         //Scan QR
-        Mat image = new Mat();
-        image = api.getMatNavCam();
+        Mat image = api.getMatNavCam();
         api.saveMatImage(image,"wp2.png");
         String report = read_QRcode(image);
 
-        */
-
-        //Begin Search
-        //Long ActiveTime = Time.get(0); //Remaining time in current phase in milliseconds
-        //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
+        //Explore
+        //Long ActiveTime = Time.get(0); //現在のフェーズの残り時間(ミリ秒)
+        //Long MissionTime = Time.get(1); //ミッション残り時間(ミリ秒)
         //List<Long> Time = api.getTimeRemaining();
 
-        //Waypoint2Number(1);
-
-        // move to a point1
-        //Point point1 = new Point(11.2746,-9.92284,5.2988 );
-        //Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
-        //api.moveTo(point1, quaternion1, true);
-
-        //api.laserControl(true);
-        //api.laserControl(false);   
-
-        while (api.getTimeRemaining().get(1) >(5-5.00)*60*1000){
-            GoTarget(api.getActiveTargets(),Now_place);
+        while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
+            Log.i(TAG,"current position: "+Global.Nowplace);
+            GoTarget(api.getActiveTargets());
         }
-
-        MoveToWaypoint(waypoints_config.wp2); // QR point
-
-        //Change value 
-        Now_place = 9;
-
-        // turn on the front flash light
-        api.flashlightControlFront(0.50f);
-
-        //Scan QR
-        Mat image = new Mat();
-        image = api.getMatNavCam();
-        api.saveMatImage(image,"wp2.png");
-        String report = read_QRcode(image);
-
-        // turn off the front flash light
-        api.flashlightControlFront(0.00f);
-
-        Log.i(TAG,"go to goal");
+        Log.i(TAG,"moving to goal");
         MoveToWaypoint(waypoints_config.goal_point);
 
         api.notifyGoingToGoal();
@@ -235,7 +145,7 @@ public class YourService extends KiboRpcService {
             Log.i(TAG, "markerIds:" + Arrays.toString(markerIds.get(n,0)));
             Log.i(TAG, "top left:" + Arrays.toString(corners.get(n).get(0, 0)));
             Log.i(TAG, "top right:" + Arrays.toString(corners.get(n).get(0, 1)));
-            Log.i(TAG, "bottom right:" + Arrays.toString(corners.get(n).get(0, 2)));
+            Log.i(TAG, "bottom right" + Arrays.toString(corners.get(n).get(0, 2)));
             Log.i(TAG, "bottom left:" + Arrays.toString(corners.get(n).get(0, 3)));
         }
     }
@@ -278,17 +188,34 @@ public class YourService extends KiboRpcService {
         Log.i(TAG, "[LoggingKinematics]: acceleration" + kinematics.getLinearAcceleration().toString());  // 加速度
     }
 
-    private  void GoTarget(List<Integer> ActiveTargets, int Now_place){
+    private  void GoTarget(List<Integer> ActiveTargets){
         int index = ActiveTargets.size();
         int i = 0;
-        //Currently, it is designed to go in ascending order of numbers
-        // ----- Replace the contents of ActiveTarget so that you can move at the shortest distance Put the necessary items here or in another function ------------
+        double [] distance = new double[2];
+
+        Log.i(TAG,"active target"+ActiveTargets.toString());
+        //Changed the order of the objective targets to be the shortest distance
+        if (index == 2) {
+            distance[0] = minimum_distance(Global.Nowplace,ActiveTargets.get(0)-1);
+            distance[1] = minimum_distance(Global.Nowplace,ActiveTargets.get(1)-1);
+            if(distance[0] > distance[1]){
+                //順番を交換
+                int temp = ActiveTargets.get(0);
+                ActiveTargets.set(0,ActiveTargets.get(1));
+                ActiveTargets.set(1,temp);
+                Log.i(TAG,"Swap Active Target"+ActiveTargets.toString());
+            }
+        }
+        //
 
         while(i < index){
-            Log.i(TAG, "Let's go " + ActiveTargets.get(i).toString());
-            List<Integer> route = getShortestPath(Now_place,ActiveTargets.get(i));
-            for(int n = 1; n<route.size();n++){
-                Log.i(TAG, "Let's go to node " +route.get(n).toString());
+            Log.i(TAG, "Let's go Target" + ActiveTargets.get(i).toString());
+            Log.i(TAG,"Current position in Gotarget"+Global.Nowplace);
+            List<Integer>route = dijkstra(Global.Nowplace,ActiveTargets.get(i)-1); //-1 fixes to zero origin
+            Log.i(TAG,"Route"+route.toString());
+
+            for(int n = 1; n<route.size();n++){ //n = 0 is the starting point, so skip it
+                //Log.i(TAG, "Let's go to node " +route.get(n).toString());
                 Waypoint2Number(route.get(n));
             }
             api.laserControl(true);
@@ -297,10 +224,13 @@ public class YourService extends KiboRpcService {
         }
     }
 
-    public static double[] dijkstra(double[][] A, int start) {
+    public static List<Integer> dijkstra(int start, int end) {
+        double [][] A = adjacency_matrix.graph;
         int n = A.length; // number of vertices
         double[] distances = new double[n]; // shortest distance from the starting point to each vertex
         boolean[] visited = new boolean[n]; // vertex visit state
+        int [] prev = new int[n]; //previous vertex
+        List<Integer> path = new ArrayList<>(); //save path
 
         // Initialize the distances array and set vertices other than the starting point to infinity
         Arrays.fill(distances, INF);
@@ -332,121 +262,57 @@ public class YourService extends KiboRpcService {
                     double distance = distances[minIndex] + A[minIndex][j];
                     if (distance < distances[j]) {
                         distances[j] = distance;
+                        prev[j] = minIndex;
                     }
                 }
             }
         }
-
-        return distances;
-    }
-
-    public static List<Integer> getShortestPath(int start, int end) {
-        double[][] A = adjacency_matrix.graph;
-        double[] distances = dijkstra(A, start);
-        List<Integer> path = new ArrayList<>();
-
         if (distances[end] == INF) {
             return path; // Returns an empty list if unreachable
         }
-
-        //Restore shortest path from end point to start point
+        // Restore shortest path from end point to start point
         int current = end;
         path.add(current);
         while (current != start) {
-            for (int prev = 0; prev < A.length; prev++) {
-                if (A[prev][current] != INF && distances[current] == distances[prev] + A[prev][current]) {
-                    current = prev;
-                    path.add(0, current);
-                    break;
-                }
+                current = prev[current];
+                path.add(0,current);
             }
-        }
-
+        path.add(0,start);
         return path;
     }
-
-    private String[] StringArray2DoubleArray(double[] array){
-        String[] stringArray = new String[array.length];
-        for (int i = 0; i < array.length; i++) {
-            stringArray[i] = Double.toString(array[i]);
-        }
-        return stringArray;
-    }
-
-    private void Waypoint2Number(int n){
-        Now_place = n; //Change current position
+// Waypoint number when considered with zero origin    private void Waypoint2Number(int n){
+        Global.Nowplace = n; //現在位置の変更
+        Log.i(TAG,"Now_place is "+ Global.Nowplace);
         switch (n){
+            case 0:
+                MoveToWaypoint(waypoints_config.point1);
+                break;
             case 1:
-                MoveToWaypoint(waypoints_config.point1);
-                // move to a point1
-                Point point1 = new Point(11.2746,-9.92284,5.2988 );
-                Quaternion quaternion1 = new Quaternion(0f,0f,-0.707f,0.707f);
-                api.moveTo(point1, quaternion1, true);
-                //point laser
-                api.laserControl(true);
-                api.laserControl(false);
-                MoveToWaypoint(waypoints_config.point1);
+                MoveToWaypoint(waypoints_config.point2);
                 break;
             case 2:
-                MoveToWaypoint(waypoints_config.point2);
-                // move to a point2
-                Point point2 = new Point(10.612f,-9.0709f,4.48f);
-                Quaternion quaternion2 = new Quaternion(0.5f,0.5f,-0.5f,0.5f);
-                api.moveTo(point2, quaternion2, true);
-                //point laser
-                api.laserControl(true);
-                api.laserControl(false);
-                MoveToWaypoint(waypoints_config.point2);
+                MoveToWaypoint(waypoints_config.point3);
                 break;
             case 3:
-                MoveToWaypoint(waypoints_config.point3);
-                // move to a point3
-                Point point3 = new Point(10.71f,-7.7f,4.48f);
-                Quaternion quaternion3 = new Quaternion(0f,0.707f,0f,0.707f);
-                api.moveTo(point3, quaternion3, true);
-                //point laser
-                api.laserControl(true);
-                api.laserControl(false);
-                MoveToWaypoint(waypoints_config.point3);
+                MoveToWaypoint(waypoints_config.point4);
                 break;
             case 4:
-                MoveToWaypoint(waypoints_config.point4);
-                // move to a point4
-                Point point4 = new Point(10.51f,-6.7185f,5.1804f);
-                Quaternion quaternion4 = new Quaternion(0f,0f,-1f,0f);
-                api.moveTo(point4, quaternion4, true);
-                //point laser
-                api.laserControl(true);
-                api.laserControl(false);
-                MoveToWaypoint(waypoints_config.point4);
+                MoveToWaypoint(waypoints_config.point5);
                 break;
             case 5:
-                MoveToWaypoint(waypoints_config.point5);
-                // move to a point5
-                Point point5 = new Point(11.114f,-7.9756f,5.3393f);
-                Quaternion quaternion5 = new Quaternion(-0.5f,-0.5f,-0.5f,0.5f);
-                api.moveTo(point5, quaternion5, true);
-                //point laser
-                api.laserControl(true);
-                api.laserControl(false);        
-                MoveToWaypoint(waypoints_config.point5);
+                MoveToWaypoint(waypoints_config.point6);
                 break;
             case 6:
-                MoveToWaypoint(waypoints_config.point6);
-                // move to a point6
-                Point point6 = new Point(11.355f,-8.9929f,4.7818f);
-                Quaternion quaternion6 = new Quaternion(0f,0f,0f,1f);
-                api.moveTo(point6, quaternion6, true);
-                MoveToWaypoint(waypoints_config.point6);
-                break;
-            case 7:
                 MoveToWaypoint(waypoints_config.goal_point);
                 break;
-            case 8:
+            case 7:
                 MoveToWaypoint(waypoints_config.wp1);
                 break;
-            case 9:
+            case 8:
                 MoveToWaypoint(waypoints_config.wp2);
+                break;
+            case 9:
+                MoveToWaypoint(waypoints_config.wp3);
                 break;
         }
     }
@@ -454,34 +320,34 @@ public class YourService extends KiboRpcService {
     /**
      * FUNCTIONs ABOUT QRCODE
      */
-    private String read_QRcode(Mat image){
+    private String read_QRcode(Mat image) {
         String QRcode_content = "";
-        try{
-            api.saveMatImage(image,"QR.png");
+        try {
+            api.saveMatImage(image, "QR.png");
             Mat mini_image = new Mat(image, new Rect(700, 360, 240, 240)); // The value here is the area to clip
-            api.saveMatImage(mini_image,"QR_mini.png");
+            api.saveMatImage(mini_image, "QR_mini.png");
 
             MatOfPoint2f points = new MatOfPoint2f();
             Mat straight_qrcode = new Mat();
             QRCodeDetector qrc_detector = new QRCodeDetector();
             Boolean detect_success = qrc_detector.detect(mini_image, points);
-            Log.i(TAG,"detect_success is " + detect_success.toString());
+            Log.i(TAG, "detect_success is " + detect_success.toString());
 
             QRcode_content = qrc_detector.detectAndDecode(mini_image, points, straight_qrcode);
-            Log.i(TAG,"QRCode_content is " + QRcode_content);
-            if(QRcode_content != null){
+            Log.i(TAG, "QRCode_content is " + QRcode_content);
+            if (QRcode_content != null) {
                 Mat straight_qrcode_gray = new Mat();
                 straight_qrcode.convertTo(straight_qrcode_gray, CvType.CV_8UC1);
-                api.saveMatImage(straight_qrcode_gray,"QR_binary.png");
+                api.saveMatImage(straight_qrcode_gray, "QR_binary.png");
             }
 
-        } catch(Exception e){
+        } catch (Exception e) {
             ;
         }
         /**
          * QRCode_CONTENT to REPORT_MESSEGE
          */
-        switch(QRcode_content){
+        switch (QRcode_content) {
             case "JEM":
                 QRcode_content = "STAY_AT_JEM";
                 break;
@@ -506,4 +372,13 @@ public class YourService extends KiboRpcService {
         }
         return QRcode_content;
     }
-}
+
+    private double minimum_distance(int start,int end){
+        List<Integer> route = dijkstra(start,end);
+        double distance = 0;
+        for (int n = 0; n < route.size() - 1; n++) {
+            distance = adjacency_matrix.graph[route.get(n)][route.get(n + 1)];
+        }
+        return distance;
+
+    }
