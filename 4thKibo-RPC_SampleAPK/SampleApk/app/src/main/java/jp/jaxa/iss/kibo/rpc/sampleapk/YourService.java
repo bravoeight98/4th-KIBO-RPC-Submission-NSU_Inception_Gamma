@@ -42,7 +42,7 @@ public class YourService extends KiboRpcService {
 
         //Begin Mission
         api.startMission();
-        Log.i(TAG, "start!!!!!!!!!!!!!!!!");
+        Log.i(TAG, "begin mission");
         MoveToWaypoint(waypoints_config.wp1); // initial point
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
@@ -145,10 +145,10 @@ public class YourService extends KiboRpcService {
     private void Print_AR(List<Mat> corners, Mat markerIds) {
         for (int n = 0; n < 4; n++) {
             Log.i(TAG, "markerIds:" + Arrays.toString(markerIds.get(n,0)));
-            Log.i(TAG, "左上:" + Arrays.toString(corners.get(n).get(0, 0)));
-            Log.i(TAG, "右上:" + Arrays.toString(corners.get(n).get(0, 1)));
-            Log.i(TAG, "右下:" + Arrays.toString(corners.get(n).get(0, 2)));
-            Log.i(TAG, "左下:" + Arrays.toString(corners.get(n).get(0, 3)));
+            Log.i(TAG, "top left:" + Arrays.toString(corners.get(n).get(0, 0)));
+            Log.i(TAG, "top right:" + Arrays.toString(corners.get(n).get(0, 1)));
+            Log.i(TAG, "bottom right:" + Arrays.toString(corners.get(n).get(0, 2)));
+            Log.i(TAG, "bottom left:" + Arrays.toString(corners.get(n).get(0, 3)));
         }
     }
 
