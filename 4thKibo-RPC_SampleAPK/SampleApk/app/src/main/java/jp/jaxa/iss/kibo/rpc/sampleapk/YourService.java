@@ -34,44 +34,41 @@ import java.util.List;
  */
 
 public class YourService extends KiboRpcService {
-    private static final double INF = Double.POSITIVE_INFINITY; // 非接続を示すための無限大の値
+    private static final double INF = Double.POSITIVE_INFINITY; // an infinity value to indicate disconnection
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void runPlan1(){
 
-        /*//////////////////////////////
-        //      mission start         //
-        /*//////////////////////////////
+        //Begin Mission
         api.startMission();
         Log.i(TAG, "start!!!!!!!!!!!!!!!!");
         MoveToWaypoint(waypoints_config.wp1); // initial point
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
-        //nupeさんここ値の変更はまかせた
+        //Value Change
         Global.Nowplace = 8;
 
 
-        ///////////////ここでQRを読み込む///////////////////
+        //Scan QR here
         Mat image = api.getMatNavCam();
         api.saveMatImage(image,"wp2.png");
         String report = read_QRcode(image);
-        ////////////////////////////////////////////////////
 
 
 
 
-        //////////////ここから探索//////////////////////////
-        //Long ActiveTime = Time.get(0); //現在のフェーズの残り時間(ミリ秒)
-        //Long MissionTime = Time.get(1); //ミッション残り時間(ミリ秒)
+        //Explore from here
+        //Long ActiveTime = Time.get(0); //Remaining time in current phase in milliseconds
+        //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
         while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
-            Log.i(TAG,"runPlan1内での現在位置"+Global.Nowplace);
+            Log.i(TAG,"current position in runPlan1"+Global.Nowplace);
             GoTarget(api.getActiveTargets());
         }
-        Log.i(TAG,"go to goal");
+        Log.i(TAG,"Moving to goal");
         MoveToWaypoint(waypoints_config.goal_point);
 
         api.notifyGoingToGoal();
@@ -108,7 +105,7 @@ public class YourService extends KiboRpcService {
                 (float) qua_z, (float) qua_w);
         Result result = api.relativeMoveTo(point, quaternion, true);
 
-        // 移動コマンドが正常動作しているかをStatus列挙型で出力 詳しくは下記URL
+        // Output whether the movement command is operating normally with the Status enum type For details, please refer to the following URL
         // https://github.com/nasa/astrobee_android/blob/a8560ab0270ac281d8eadeb48645f4224582985e/astrobee_api/api/src/main/java/gov/nasa/arc/astrobee/Result.java
         if(result.hasSucceeded()){
             String str = result.getStatus().toString();
