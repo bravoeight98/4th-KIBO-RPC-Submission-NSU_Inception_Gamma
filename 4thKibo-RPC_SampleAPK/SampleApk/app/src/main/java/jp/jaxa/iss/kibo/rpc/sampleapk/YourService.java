@@ -50,8 +50,15 @@ public class YourService extends KiboRpcService {
         //Value Change
         Global.Nowplace = 8;
 
+
+        // move to a point2
+        Point pointQR = new Point(11.381944f,-8.566172f,3.76203f);
+        Quaternion quaternionQR = new Quaternion(0f,0f,0f,1f);
+        api.moveTo(pointQR, quaternionQR, true);
+
         // turn on the front flash light
         api.flashlightControlFront(0.50f);
+
 
 
         //Scan QR here
@@ -61,6 +68,9 @@ public class YourService extends KiboRpcService {
 
         // turn off the front flash light
         api.flashlightControlFront(0.00f);
+
+        MoveToWaypoint(waypoints_config.wp2); // QR point
+
 
 
         //Explore from here
@@ -224,9 +234,9 @@ public class YourService extends KiboRpcService {
                 //Log.i(TAG, "Let's go to node " +route.get(n).toString());
                 Waypoint2Number(route.get(n));
             }
-            api.laserControl(true);
+            //api.laserControl(true);
             api.takeTargetSnapshot(ActiveTargets.get(i));
-            api.laserControl(false);
+            //api.laserControl(false);
             ++i;
         }
     }
@@ -292,28 +302,25 @@ public class YourService extends KiboRpcService {
         Global.Nowplace = n; //Change current position
         Log.i(TAG,"Now_place is "+ Global.Nowplace);
         switch (n){
-            case 0:
+            case 1:
                 MoveToWaypoint(waypoints_config.point1);
                 break;
-            case 1:
+            case 2:
                 MoveToWaypoint(waypoints_config.point2);
                 break;
-            case 2:
+            case 3:
                 MoveToWaypoint(waypoints_config.point3);
                 break;
-            case 3:
+            case 4:
                 MoveToWaypoint(waypoints_config.point4);
                 break;
-            case 4:
+            case 5:
                 MoveToWaypoint(waypoints_config.point5);
                 break;
-            case 5:
+            case 6:
                 MoveToWaypoint(waypoints_config.point6);
                 break;
-            case 6:
-                MoveToWaypoint(waypoints_config.goal_point);
-                break;
-            case 7:
+           case 7:
                 MoveToWaypoint(waypoints_config.wp1);
                 break;
             case 8:
