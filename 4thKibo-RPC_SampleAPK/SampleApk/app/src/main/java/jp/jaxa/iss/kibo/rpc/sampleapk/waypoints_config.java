@@ -55,5 +55,12 @@ public interface waypoints_config {
                 0, 0, -0.707, 0.707,
                 0, 0, 0.0);    // way point
 
+                // wp1 -> (point2, point6, wp1, wp3, start)
+        Waypoint wpQR = new Waypoint(11.381944, -8.566172, 3.76203,
+                0, 0, 0, 1,
+                0, 0, 0); 
+
+        
+
 
 }
