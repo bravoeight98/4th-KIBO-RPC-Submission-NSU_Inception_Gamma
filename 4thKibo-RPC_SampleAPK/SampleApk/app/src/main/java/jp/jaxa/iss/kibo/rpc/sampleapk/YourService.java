@@ -40,7 +40,7 @@ public class YourService extends KiboRpcService {
     @Override
     protected void runPlan1(){
 
-        //Begin Mission
+        //Begin mission 
         api.startMission();
         Log.i(TAG, "begin mission");
         MoveToWaypoint(waypoints_config.wp1); // initial point
@@ -50,28 +50,21 @@ public class YourService extends KiboRpcService {
         //Value Change
         Global.Nowplace = 8;
 
-        // turn on the front flash light
-        api.flashlightControlFront(0.10f);
 
-        //Scan QR here
+        //Value Change
         Mat image = api.getMatNavCam();
         api.saveMatImage(image,"wp2.png");
         String report = read_QRcode(image);
 
-        // turn off the front flash light
-        api.flashlightControlFront(0.00f);
-
-        MoveToWaypoint(waypoints_config.wp2); // QR point
-
 
 
         //Explore from here
-        //Long ActiveTime = Time.get(0); //Remaining time in current phase in milliseconds
+        //Long ActiveTime = Time.get(0);//Remaining time in current phase in milliseconds
         //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
-        while (api.getTimeRemaining().get(1) >(5-4.00)*60*1000){
-            Log.i(TAG,"current position in runPlan1"+Global.Nowplace);
+        while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
+            Log.i(TAG,"current position "+Global.Nowplace);
             GoTarget(api.getActiveTargets());
         }
         Log.i(TAG,"Moving to goal");
@@ -191,9 +184,9 @@ public class YourService extends KiboRpcService {
         Log.i(TAG, "[LoggingKinematics]: state" + kinematics.getConfidence().toString());
         Log.i(TAG, "[LoggingKinematics]: absolute coordinates" + kinematics.getPosition().toString());
         Log.i(TAG, "[LoggingKinematics]: direction coordinates" + kinematics.getOrientation().toString());
-        Log.i(TAG, "[LoggingKinematics]: Line speed" + kinematics.getLinearVelocity().toString());      // Line speed
-        Log.i(TAG, "[LoggingKinematics]: angular velocity" + kinematics.getAngularVelocity().toString());     // angular velocity
-        Log.i(TAG, "[LoggingKinematics]: acceleration" + kinematics.getLinearAcceleration().toString());  // acceleration
+        Log.i(TAG, "[LoggingKinematics]: Line speed" + kinematics.getLinearVelocity().toString());      // 線速度
+        Log.i(TAG, "[LoggingKinematics]: angular velocity" + kinematics.getAngularVelocity().toString());     // 角速度
+        Log.i(TAG, "[LoggingKinematics]: acceleration" + kinematics.getLinearAcceleration().toString());  // 加速度
     }
 
     private  void GoTarget(List<Integer> ActiveTargets){
@@ -218,7 +211,7 @@ public class YourService extends KiboRpcService {
 
         while(i < index){
             Log.i(TAG, "Let's go Target" + ActiveTargets.get(i).toString());
-            Log.i(TAG,"Current position in Gotarget"+Global.Nowplace);
+            Log.i(TAG,"Current position"+Global.Nowplace);
             List<Integer>route = dijkstra(Global.Nowplace,ActiveTargets.get(i)-1); //-1 is a fix to zero origin
             Log.i(TAG,"Route"+route.toString());
 
@@ -228,7 +221,6 @@ public class YourService extends KiboRpcService {
             }
             api.laserControl(true);
             api.takeTargetSnapshot(ActiveTargets.get(i));
-            api.laserControl(false);
             ++i;
         }
     }
@@ -294,25 +286,28 @@ public class YourService extends KiboRpcService {
         Global.Nowplace = n; //Change current position
         Log.i(TAG,"Now_place is "+ Global.Nowplace);
         switch (n){
-            case 1:
+            case 0:
                 MoveToWaypoint(waypoints_config.point1);
                 break;
-            case 2:
+            case 1:
                 MoveToWaypoint(waypoints_config.point2);
                 break;
-            case 3:
+            case 2:
                 MoveToWaypoint(waypoints_config.point3);
                 break;
-            case 4:
+            case 3:
                 MoveToWaypoint(waypoints_config.point4);
                 break;
-            case 5:
+            case 4:
                 MoveToWaypoint(waypoints_config.point5);
                 break;
-            case 6:
+            case 5:
                 MoveToWaypoint(waypoints_config.point6);
                 break;
-           case 7:
+            case 6:
+                MoveToWaypoint(waypoints_config.goal_point);
+                break;
+            case 7:
                 MoveToWaypoint(waypoints_config.wp1);
                 break;
             case 8:
