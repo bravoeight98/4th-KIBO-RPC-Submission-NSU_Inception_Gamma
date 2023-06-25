@@ -50,16 +50,8 @@ public class YourService extends KiboRpcService {
         //Value Change
         Global.Nowplace = 8;
 
-
-        // move to a point2
-        Point pointQR = new Point(11.381944f,-8.566172f,3.76203f);
-        Quaternion quaternionQR = new Quaternion(0f,0f,0f,1f);
-        api.moveTo(pointQR, quaternionQR, true);
-
         // turn on the front flash light
-        api.flashlightControlFront(0.50f);
-
-
+        api.flashlightControlFront(0.10f);
 
         //Scan QR here
         Mat image = api.getMatNavCam();
@@ -234,9 +226,9 @@ public class YourService extends KiboRpcService {
                 //Log.i(TAG, "Let's go to node " +route.get(n).toString());
                 Waypoint2Number(route.get(n));
             }
-            //api.laserControl(true);
+            api.laserControl(true);
             api.takeTargetSnapshot(ActiveTargets.get(i));
-            //api.laserControl(false);
+            api.laserControl(false);
             ++i;
         }
     }
