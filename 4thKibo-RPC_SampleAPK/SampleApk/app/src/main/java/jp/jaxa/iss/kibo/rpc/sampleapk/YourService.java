@@ -50,13 +50,17 @@ public class YourService extends KiboRpcService {
         //Value Change
         Global.Nowplace = 8;
 
+        // turn on the front flash light
+        api.flashlightControlFront(0.50f);
+
 
         //Scan QR here
         Mat image = api.getMatNavCam();
         api.saveMatImage(image,"wp2.png");
         String report = read_QRcode(image);
 
-
+        // turn off the front flash light
+        api.flashlightControlFront(0.00f);
 
 
         //Explore from here
@@ -64,7 +68,7 @@ public class YourService extends KiboRpcService {
         //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
-        while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
+        while (api.getTimeRemaining().get(1) >(5-4.00)*60*1000){
             Log.i(TAG,"current position in runPlan1"+Global.Nowplace);
             GoTarget(api.getActiveTargets());
         }
