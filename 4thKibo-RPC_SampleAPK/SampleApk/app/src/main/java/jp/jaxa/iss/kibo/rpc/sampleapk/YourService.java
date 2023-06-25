@@ -47,10 +47,8 @@ public class YourService extends KiboRpcService {
 
         MoveToWaypoint(waypoints_config.wp2); // QR point
 
-        MoveToWaypoint(waypoints_config.wpQR); // Actual QR point
-
         //Value Change
-        Global.Nowplace = 8;
+        Global.Nowplace = 9;
 
         // turn on the front flash light
         api.flashlightControlFront(0.50f);
@@ -70,7 +68,7 @@ public class YourService extends KiboRpcService {
         //Long MissionTime = Time.get(1); //Mission Remaining Time (ms)
         //List<Long> Time = api.getTimeRemaining();
 
-        while (api.getTimeRemaining().get(1) >(5-3.)*60*1000){
+        while (api.getTimeRemaining().get(1) >(5-4.0)*60*1000){
             Log.i(TAG,"current position in runPlan1"+Global.Nowplace);
             GoTarget(api.getActiveTargets());
         }
@@ -228,6 +226,7 @@ public class YourService extends KiboRpcService {
             }
             api.laserControl(true);
             api.takeTargetSnapshot(ActiveTargets.get(i));
+            api.laserControl(false);
             ++i;
         }
     }
